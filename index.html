@@ -14,8 +14,8 @@
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <style>
-  :root { --bg:#f6f7f9; --panel:#fff; --panel2:#f9fafb; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --head:#111827; }
-  body.dark { --bg:#0b1220; --panel:#111827; --panel2:#0f172a; --text:#e5e7eb; --muted:#9ca3af; --border:#1f2937; --head:#020617; }
+  :root { --bg:#f6f7f9; --panel:#fff; --panel2:#f9fafb; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --head:#111827; --hover:#eff6ff; --focus:#2563eb; --danger-hover:#fee2e2; }
+  body.dark { --bg:#0b1220; --panel:#111827; --panel2:#0f172a; --text:#e5e7eb; --muted:#9ca3af; --border:#1f2937; --head:#020617; --hover:#1e293b; --focus:#60a5fa; --danger-hover:#450a0a; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); height:100dvh; display:flex; flex-direction:column; }
   header { padding:14px 16px; padding-top:calc(14px + env(safe-area-inset-top)); background:var(--head); color:#fff; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -50,6 +50,7 @@
   .icon-btn:hover { color:var(--text); } .icon-btn.del:hover { color:#dc2626; }
   .drag { cursor:grab; color:#9ca3af; font-size:14px; flex-shrink:0; }
   .task.drag-over { border-top:3px solid #111827; }
+  .sub.drag-over { border-top:3px solid var(--text); }
   input[type="checkbox"] { width:18px; height:18px; accent-color:#111827; cursor:pointer; flex-shrink:0; }
   .empty { color:var(--muted); font-size:14px; padding:24px 8px; text-align:center; line-height:1.5; }
   .right h2 { font-size:20px; word-break:break-word; cursor:text; }
@@ -65,6 +66,18 @@
   .ghost { margin-top:16px; background:none; border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:8px; cursor:pointer; font-size:13px; }
   .back { display:none; margin-bottom:12px; background:none; border:0; cursor:pointer; font-size:15px; color:var(--text); font-weight:600; }
   .install-tip { display:none; background:#fef3c7; color:#92400e; padding:10px 14px; font-size:13px; line-height:1.5; }
+  /* Highlight the row when any of its controls has focus. */
+  .task:focus-within, .sub:focus-within { background:var(--hover); outline:2px solid var(--focus); outline-offset:2px; }
+  button:focus-visible, input:focus, select:focus, textarea:focus { outline:2px solid var(--focus); outline-offset:2px; }
+  .icon-btn:focus-visible { color:var(--text); background:var(--hover); border-radius:4px; }
+  .icon-btn.del:focus-visible { color:#dc2626; background:var(--danger-hover); }
+  @media (hover:hover) {
+    .task:hover, .sub:hover { background:var(--hover); }
+    button:hover { box-shadow:inset 0 0 0 999px rgb(100 116 139 / 20%); }
+    .icon-btn:hover, .ghost:hover, .back:hover { background:var(--hover); }
+    .danger:hover, .icon-btn.del:hover { background:var(--danger-hover); }
+    input:not([type="checkbox"]):hover, select:hover, textarea:hover { border-color:var(--focus); }
+  }
   @media (max-width:700px) {
     .layout { flex-direction:column; } .left,.right { width:100%; max-width:none; border-right:0; }
     .right { display:none; } body.show-detail .left { display:none; }
@@ -90,7 +103,7 @@
       <input id="taskInput" placeholder="Add a task and press Enter…" maxlength="300">
       <button id="addTaskBtn">Add</button>
     </div>
-    <input class="search" id="searchInput" placeholder="🔍 Search tasks…">
+    <input class="search" id="searchInput" placeholder="🔍 Search titles, notes, subtasks…">
     <div class="row2">
       <div class="filters">
         <button data-filter="all" class="active">All</button>
@@ -177,7 +190,7 @@ function render(){
   const list=document.getElementById('taskList');
   let visible=state.tasks.filter(t=>
     (filter==='all'?true:filter==='active'?!t.done:t.done) &&
-    (!query || t.title.toLowerCase().includes(query) || t.subtasks.some(s=>s.title.toLowerCase().includes(query)))
+    (!query || t.title.toLowerCase().includes(query) || t.notes.toLowerCase().includes(query) || t.subtasks.some(s=>s.title.toLowerCase().includes(query)))
   );
   if(sortMode==='due') visible=[...visible].sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
   if(sortMode==='prio'){ const w={high:0,med:1,low:2}; visible=[...visible].sort((a,b)=>w[a.priority]-w[b.priority]); }
@@ -239,6 +252,7 @@ function render(){
     <textarea id="notesInput" placeholder="Notes for this task… (saves automatically)">${esc(t.notes||'')}</textarea>
     <div class="add-row"><input id="subInput" placeholder="Add a subtask and press Enter…" maxlength="300"><button id="addSubBtn">Add</button></div>
     <div id="subList"></div>
+    <div class="hint">Drag ☰ to reorder subtasks. Order saves automatically.</div>
     <button class="ghost" id="dupBtn">Duplicate task</button>
     <button class="danger" id="delTaskBtn">Delete this task</button>`;
   detail.querySelector('#detailTitle').addEventListener('dblclick',e=>{
@@ -247,19 +261,50 @@ function render(){
   detail.querySelector('#dueInput').addEventListener('change',e=>{ t.due=e.target.value; save(); render(); });
   detail.querySelector('#prioSel').addEventListener('change',e=>{ t.priority=e.target.value; save(); render(); });
   let noteTimer;
-  detail.querySelector('#notesInput').addEventListener('input',e=>{ clearTimeout(noteTimer); noteTimer=setTimeout(()=>{ t.notes=e.target.value; save(); },300); });
+  detail.querySelector('#notesInput').addEventListener('input',e=>{ t.notes=e.target.value; clearTimeout(noteTimer); noteTimer=setTimeout(save,300); });
   const subList=detail.querySelector('#subList');
+  let draggedSubId=null;
+  const clearSubDrag=()=>{
+    draggedSubId=null;
+    subList.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+  };
   if(!t.subtasks.length) subList.innerHTML=`<div class="empty">Break it down — add the first step above.</div>`;
   t.subtasks.forEach(s=>{
     const el=document.createElement('div');
     el.className='sub'+(s.done?' done':'');
-    el.innerHTML=`<input type="checkbox" ${s.done?'checked':''}><span class="title">${esc(s.title)}</span><button class="icon-btn edit" title="Edit">✎</button><button class="icon-btn del">×</button>`;
+    el.draggable=true;
+    el.innerHTML=`<span class="drag" title="Drag to reorder subtask">☰</span><input type="checkbox" ${s.done?'checked':''}><span class="title">${esc(s.title)}</span><button class="icon-btn edit" title="Edit">✎</button><button class="icon-btn del">×</button>`;
     const span=el.querySelector('.title');
     const doEdit=()=>startEdit(span, s.title, v=>{ s.title=v; save(); });
     el.querySelector('.edit').addEventListener('click',doEdit);
     span.addEventListener('dblclick',doEdit);
     el.querySelector('input').addEventListener('change',e=>{ s.done=e.target.checked; save(); render(); });
     el.querySelector('.del').addEventListener('click',()=>{ t.subtasks=t.subtasks.filter(x=>x.id!==s.id); save(); render(); });
+    // Keep subtask drags separate from task drags and text editing.
+    el.addEventListener('dragstart',e=>{
+      if(el.querySelector('.edit-input') || e.target.closest('input, button')){ e.preventDefault(); return; }
+      draggedSubId=s.id;
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('application/x-todo-subtask',s.id);
+    });
+    el.addEventListener('dragover',e=>{
+      if(!draggedSubId || draggedSubId===s.id) return;
+      e.preventDefault(); e.dataTransfer.dropEffect='move'; el.classList.add('drag-over');
+    });
+    el.addEventListener('dragleave',e=>{
+      if(!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
+    });
+    el.addEventListener('dragend',clearSubDrag);
+    el.addEventListener('drop',e=>{
+      e.preventDefault();
+      const fromId=e.dataTransfer.getData('application/x-todo-subtask');
+      const valid=draggedSubId && fromId===draggedSubId;
+      clearSubDrag();
+      if(!valid) return;
+      const from=t.subtasks.findIndex(x=>x.id===fromId), to=t.subtasks.findIndex(x=>x.id===s.id);
+      if(from<0 || to<0 || from===to) return;
+      const [moved]=t.subtasks.splice(from,1); t.subtasks.splice(to,0,moved); save(); render();
+    });
     subList.appendChild(el);
   });
   const input=detail.querySelector('#subInput');

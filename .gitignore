@@ -1,4 +1,4 @@
-# Track only the files required to deploy this static PWA.
+# Track deployment files and the explicitly requested product backlog.
 /*
 !/.gitignore
 !/index.html
@@ -7,3 +7,4 @@
 !/icon-180.png
 !/icon-192.png
 !/icon-512.png
+!/BACKLOG.md
