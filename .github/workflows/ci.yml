@@ -1,0 +1,38 @@
+name: CI — verify + scan
+
+# Runs on every pull request and every push to main.
+# Red checks block merge (set this workflow as required in
+# Settings → Branches → Branch protection for main).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  smoke:
+    name: Smoke checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run smoke checks
+        run: node tests/smoke.check.mjs
+
+  codeql:
+    name: CodeQL security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
