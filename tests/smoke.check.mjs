@@ -44,5 +44,18 @@ const sw = readFileSync('sw.js', 'utf8');
 try { new vm.Script(sw); ok(true, 'sw.js parses'); } catch (e) { ok(false, `sw.js parses (${e.message})`); }
 ok(/CACHE/.test(sw) && /v\d+/.test(sw), 'sw.js declares a versioned cache name (bump it every release)');
 
+
+// 6. Top panel follows the theme (REQ-1 / DES-1): light header is light,
+//    dark header unchanged, and no literal colors in the header rules
+const rootBlock = (html.match(/:root\s*{([^}]*)}/) || [])[1] || '';
+const darkBlock = (html.match(/body\.dark\s*{([^}]*)}/) || [])[1] || '';
+const headVar = (block) => ((block.match(/--head:\s*(#[0-9a-fA-F]+)/) || [])[1] || '').toLowerCase();
+ok(headVar(rootBlock) === '#fff', 'light theme --head is #fff (light top panel)');
+ok(headVar(darkBlock) === '#020617', 'dark theme --head stays #020617');
+const headerRule = (html.match(/header\s*{([^}]*)}/) || [])[1] || '';
+ok(/background:\s*var\(--head\)/.test(headerRule) && /color:\s*var\(--head-text\)/.test(headerRule), 'header uses var(--head) and var(--head-text)');
+const headerBtnRule = (html.match(/header button\s*{([^}]*)}/) || [])[1] || '';
+ok(/var\(--head-btn\)/.test(headerBtnRule) && !/#[0-9a-fA-F]{3,6}/.test(headerBtnRule), 'header buttons use theme variables, no literal colors');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);

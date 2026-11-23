@@ -9,19 +9,19 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Todo">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#ffffff">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <style>
-  :root { --bg:#f6f7f9; --panel:#fff; --panel2:#f9fafb; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --head:#111827; --hover:#eff6ff; --focus:#2563eb; --danger-hover:#fee2e2; }
-  body.dark { --bg:#0b1220; --panel:#111827; --panel2:#0f172a; --text:#e5e7eb; --muted:#9ca3af; --border:#1f2937; --head:#020617; --hover:#1e293b; --focus:#60a5fa; --danger-hover:#450a0a; }
+  :root { --bg:#f6f7f9; --panel:#fff; --panel2:#f9fafb; --text:#1a1a1a; --muted:#6b7280; --border:#e5e7eb; --head:#fff; --head-text:#1a1a1a; --head-btn:#f9fafb; --head-btn-text:#1a1a1a; --head-btn-border:#e5e7eb; --head-border:#e5e7eb; --hover:#eff6ff; --focus:#2563eb; --danger-hover:#fee2e2; }
+  body.dark { --bg:#0b1220; --panel:#111827; --panel2:#0f172a; --text:#e5e7eb; --muted:#9ca3af; --border:#1f2937; --head:#020617; --head-text:#fff; --head-btn:#1f2937; --head-btn-text:#e5e7eb; --head-btn-border:#374151; --head-border:#020617; --hover:#1e293b; --focus:#60a5fa; --danger-hover:#450a0a; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); height:100dvh; display:flex; flex-direction:column; }
-  header { padding:14px 16px; padding-top:calc(14px + env(safe-area-inset-top)); background:var(--head); color:#fff; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  header { padding:14px 16px; padding-top:calc(14px + env(safe-area-inset-top)); background:var(--head); color:var(--head-text); border-bottom:1px solid var(--head-border); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
   header h1 { font-size:18px; }
   header .actions { display:flex; gap:6px; flex-wrap:wrap; }
-  header button { background:#1f2937; color:#e5e7eb; border:1px solid #374151; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:13px; }
+  header button { background:var(--head-btn); color:var(--head-btn-text); border:1px solid var(--head-btn-border); padding:6px 10px; border-radius:8px; cursor:pointer; font-size:13px; }
   .layout { display:flex; flex:1; min-height:0; }
   .panel { overflow-y:auto; padding:16px; -webkit-overflow-scrolling:touch; }
   .left { width:44%; max-width:500px; border-right:1px solid var(--border); background:var(--panel); }
@@ -186,6 +186,7 @@ function deleteTask(id){
 function render(){
   document.body.classList.toggle('dark', !!state.dark);
   document.getElementById('darkBtn').textContent = state.dark ? '☀️ Light' : '🌙 Dark';
+  document.querySelector('meta[name="theme-color"]').content = state.dark ? '#020617' : '#ffffff';
   // Left
   const list=document.getElementById('taskList');
   let visible=state.tasks.filter(t=>
