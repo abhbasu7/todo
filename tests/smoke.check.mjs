@@ -51,7 +51,7 @@ const rootBlock = (html.match(/:root\s*{([^}]*)}/) || [])[1] || '';
 const darkBlock = (html.match(/body\.dark\s*{([^}]*)}/) || [])[1] || '';
 const headVar = (block) => ((block.match(/--head:\s*(#[0-9a-fA-F]+)/) || [])[1] || '').toLowerCase();
 ok(headVar(rootBlock) === '#fffdf5', 'light theme --head is #fffdf5 (champagne panel)');
-ok(headVar(darkBlock) === '#14120e', 'dark theme --head is #14120e (warm black panel)');
+ok(headVar(darkBlock) === '#0a1430', 'dark theme --head is #0a1430 (midnight navy panel)');
 const headerRule = (html.match(/header\s*{([^}]*)}/) || [])[1] || '';
 ok(/background:\s*var\(--head\)/.test(headerRule) && /color:\s*var\(--head-text\)/.test(headerRule), 'header uses var(--head) and var(--head-text)');
 const headerBtnRule = (html.match(/header button\s*{([^}]*)}/) || [])[1] || '';
@@ -62,8 +62,8 @@ ok(/var\(--head-btn\)/.test(headerBtnRule) && !/#[0-9a-fA-F]{3,6}/.test(headerBt
 const varOf = (block, name) => ((block.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]+)')) || [])[1] || '').toLowerCase();
 ok(varOf(rootBlock, '--bg') === '#fbf3d9', 'light --bg is champagne #fbf3d9');
 ok(varOf(rootBlock, '--accent') === '#b45309', 'light --accent is amber #b45309');
-ok(varOf(darkBlock, '--bg') === '#0a0908', 'dark --bg is warm black #0a0908');
-ok(varOf(darkBlock, '--accent') === '#f7931a', 'dark --accent is Bitcoin orange #f7931a');
+ok(varOf(darkBlock, '--bg') === '#050b1f', 'dark --bg is midnight navy #050b1f');
+ok(varOf(darkBlock, '--accent') === '#3b82f6', 'dark --accent is azure #3b82f6');
 ok(/\.add-row button\s*{[^}]*background:\s*var\(--accent\)/.test(html), 'Add button uses var(--accent)');
 ok(/\.task\.selected\s*{[^}]*var\(--accent\)/.test(html), 'selected task ring uses var(--accent)');
 

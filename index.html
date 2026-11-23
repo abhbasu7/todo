@@ -15,7 +15,7 @@
 <link rel="manifest" href="manifest.json">
 <style>
   :root { --bg:#fbf3d9; --panel:#fffdf5; --panel2:#faf0d0; --text:#2a2110; --muted:#7d6f4a; --border:#eadfbc; --head:#fffdf5; --head-text:#2a2110; --head-btn:#faf0d0; --head-btn-text:#2a2110; --head-btn-border:#eadfbc; --head-border:#eadfbc; --hover:#faf0d0; --focus:#b45309; --accent:#b45309; --accent-text:#ffffff; --danger-hover:#fee2e2; }
-  body.dark { --bg:#0a0908; --panel:#14120e; --panel2:#100e0a; --text:#f5efe6; --muted:#a89f91; --border:#262019; --head:#14120e; --head-text:#f5efe6; --head-btn:#262019; --head-btn-text:#f5efe6; --head-btn-border:#3a2f1d; --head-border:#2a2118; --hover:#1f1a12; --focus:#f7931a; --accent:#f7931a; --accent-text:#000000; --danger-hover:#450a0a; }
+  body.dark { --bg:#050b1f; --panel:#0a1430; --panel2:#071026; --text:#e6ebf7; --muted:#93a1c4; --border:#16224a; --head:#0a1430; --head-text:#e6ebf7; --head-btn:#12204d; --head-btn-text:#e6ebf7; --head-btn-border:#1e3468; --head-border:#16224a; --hover:#101d42; --focus:#60a5fa; --accent:#3b82f6; --accent-text:#ffffff; --danger-hover:#450a0a; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); height:100dvh; display:flex; flex-direction:column; }
   header { padding:14px 16px; padding-top:calc(14px + env(safe-area-inset-top)); background:var(--head); color:var(--head-text); border-bottom:1px solid var(--head-border); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -184,7 +184,7 @@ function deleteTask(id){
 function render(){
   document.body.classList.toggle('dark', !!state.dark);
   document.getElementById('darkBtn').textContent = state.dark ? '☀️ Light' : '🌙 Dark';
-  document.querySelector('meta[name="theme-color"]').content = state.dark ? '#14120e' : '#fffdf5';
+  document.querySelector('meta[name="theme-color"]').content = state.dark ? '#0a1430' : '#fffdf5';
   // Left
   const list=document.getElementById('taskList');
   let visible=state.tasks.filter(t=>

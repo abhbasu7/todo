@@ -14,6 +14,8 @@ read as panels.
 
 - Dark: black with orange and gold, in the iseebtc / Bitcoin direction.
   Warm black surfaces, Bitcoin orange spent only on actions and selection.
+  (Shipped, then replaced the same day at Abhi's request: dark is now
+  Midnight Navy — deep blue surfaces, azure accent. Light unchanged.)
 - Light: color in place of white — champagne (warm gold wash) in every layer.
 - Both themes keep the REQ-1 ladder: background darkest, panel one step up,
   header = panel, buttons one step up again.

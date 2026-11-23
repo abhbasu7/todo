@@ -16,24 +16,24 @@ The due badge uses var(--hover) / var(--muted).
 --head-border #eadfbc · --hover #faf0d0 · --focus #b45309 ·
 --accent #b45309 · --accent-text #ffffff · --danger-hover #fee2e2 (kept)
 
-## Dark — Bitcoin black & gold
+## Dark — Midnight Navy (replaced black & gold, 2026-11-23, Abhi's pick)
 
---bg #0a0908 · --panel #14120e · --panel2 #100e0a · --text #f5efe6 ·
---muted #a89f91 · --border #262019 · --head #14120e · --head-text #f5efe6 ·
---head-btn #262019 · --head-btn-text #f5efe6 · --head-btn-border #3a2f1d ·
---head-border #2a2118 · --hover #1f1a12 · --focus #f7931a ·
---accent #f7931a · --accent-text #000000 · --danger-hover #450a0a (kept)
+--bg #050b1f · --panel #0a1430 · --panel2 #071026 · --text #e6ebf7 ·
+--muted #93a1c4 · --border #16224a · --head #0a1430 · --head-text #e6ebf7 ·
+--head-btn #12204d · --head-btn-text #e6ebf7 · --head-btn-border #1e3468 ·
+--head-border #16224a · --hover #101d42 · --focus #60a5fa ·
+--accent #3b82f6 · --accent-text #ffffff · --danger-hover #450a0a (kept)
 
 ## Follow-through
 
-- theme-color follows the theme in render(): #fffdf5 light, #14120e dark;
+- theme-color follows the theme in render(): #fffdf5 light, #0a1430 dark;
   static meta default #fffdf5.
 - manifest.json: background_color #fbf3d9, theme_color #fffdf5.
 - sw.js cache bumps todo-v2-5 -> todo-v2-6.
 
 ## Tests (tests/smoke.check.mjs)
 
-- Section 6 values updated: light --head #fffdf5, dark --head #14120e.
-- Section 7 pins the palettes: dark --bg #0a0908, dark --accent #f7931a,
+- Section 6 values updated: light --head #fffdf5, dark --head #0a1430.
+- Section 7 pins the palettes: dark --bg #050b1f, dark --accent #3b82f6,
   light --bg #fbf3d9, light --accent #b45309, and the Add button plus
   selected-task rules use var(--accent).
