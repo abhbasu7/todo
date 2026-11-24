@@ -67,5 +67,13 @@ ok(varOf(darkBlock, '--accent') === '#3b82f6', 'dark --accent is azure #3b82f6')
 ok(/\.add-row button\s*{[^}]*background:\s*var\(--accent\)/.test(html), 'Add button uses var(--accent)');
 ok(/\.task\.selected\s*{[^}]*var\(--accent\)/.test(html), 'selected task ring uses var(--accent)');
 
+
+// 8. Sticky action bar (REQ-3 / DES-3, experiment)
+ok(html.includes('class="action-bar"'), 'detail template renders an action bar');
+ok(html.indexOf('id="delTaskBtn"') > html.indexOf('class="action-bar"'), 'Delete button sits inside the action bar');
+ok(/\.action-bar\s*{[^}]*position:\s*sticky/.test(html), 'action bar is sticky');
+ok(/\.danger\s*{[^}]*background:\s*var\(--danger-hover\)/.test(html), 'Delete uses the theme danger tint');
+ok(!html.includes('#fecaca'), 'no hard-coded pink border remains');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
