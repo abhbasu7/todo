@@ -75,5 +75,16 @@ ok(/\.action-bar\s*{[^}]*position:\s*sticky/.test(html), 'action bar is sticky')
 ok(/\.danger\s*{[^}]*background:\s*var\(--danger-hover\)/.test(html), 'Delete uses the theme danger tint');
 ok(!html.includes('#fecaca'), 'no hard-coded pink border remains');
 
+
+// 9. Layout system (REQ-4 / DES-4, experiment)
+const cssText = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+ok(!/font-size:\s*[\d.]+px/.test(cssText), 'no px font sizes (rem type scale)');
+ok(!cssText.includes('#9ca3af'), 'no hard-coded grey #9ca3af remains');
+const ruleOf = sel => (cssText.match(new RegExp(sel.replace(/[.*]/g, m => '\\' + m) + '\\s*{([^}]*)')) || [])[1] || '';
+ok(/padding:\s*\.75rem/.test(ruleOf('.task')) && /padding:\s*\.75rem/.test(ruleOf('.sub')), 'task and subtask rows share padding');
+ok(/border-radius:\s*\.75rem/.test(ruleOf('.task')) && /border-radius:\s*\.75rem/.test(ruleOf('.sub')), 'task and subtask rows share radius');
+ok((rootBlock.match(/--chip-today-bg/g) || []).length === 1 && (darkBlock.match(/--chip-today-bg/g) || []).length === 1, 'due chips are themed in both themes');
+ok(/\.sub\.drag-over\s*{[^}]*var\(--accent\)/.test(cssText), 'subtask drag indicator uses var(--accent)');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
