@@ -38,3 +38,13 @@ thumb's visual thickness changes. Rest: 3px transparent border ->
 Firefox note: scrollbar-width has no hover state, so Firefox keeps
 the thin themed bar — a platform limit, not a choice.
 Cache: todo-v2-15 -> todo-v2-16.
+
+## Amendment 2 (2026-11-27, Abhi: "highlighted but not wider")
+
+The hover-widen did not take effect in Abhi's browser — the hover
+color repainted but the border/geometry change did not (a known
+Blink repaint limitation on scrollbar pseudo-elements). Dropped the
+thin-at-rest design entirely: gutter 14px, thumb border 1px at rest
+-> ~12px visible thumb at all times; hover/active now change only
+the color. Firefox: scrollbar-width returns to auto (default width).
+Cache: todo-v2-16 -> todo-v2-17.

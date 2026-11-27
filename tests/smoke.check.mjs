@@ -125,9 +125,9 @@ ok(/\.panel\s*{[^}]*scrollbar-color:\s*var\(--scroll-thumb\)/.test(cssText), 'Fi
 
 // 15. Scrollbar widens on hover / drag (REQ-9 amendment, DES-9)
 ok(/\.panel\s*{[^}]*scrollbar-gutter:\s*stable/.test(cssText), 'scrollbar gutter is reserved (no layout shift)');
-ok(/\.panel::-webkit-scrollbar\s*{[^}]*width:\s*12px/.test(cssText), 'scrollbar gutter is 12px');
-ok(/\.panel:hover::-webkit-scrollbar-thumb\s*{[^}]*border:\s*1px/.test(cssText), 'thumb widens when the pane is hovered');
-ok(/\.panel::-webkit-scrollbar-thumb:active\s*{[^}]*border:\s*1px/.test(cssText), 'thumb stays wide while dragging');
+ok(/\.panel::-webkit-scrollbar\s*{[^}]*width:\s*14px/.test(cssText), 'scrollbar gutter is 14px');
+ok(/\.panel::-webkit-scrollbar-thumb\s*{[^}]*border:\s*1px/.test(cssText), 'thumb is wide at rest (no hover widening)');
+ok(!/\.panel:hover::-webkit-scrollbar-thumb/.test(cssText), 'no hover geometry change (Blink does not repaint it reliably)');
 
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
