@@ -22,6 +22,7 @@ Baseline: the current local `index.html`, `manifest.json`, and `sw.js`, includin
 - Task reordering in Manual mode; subtask reordering independent of task sort.
 - Task duplication; deletion and clearing completed tasks.
 - Hover highlights and focus indicators; champagne light and midnight navy dark themes, and the top panel follows the theme in both (REQ-1, REQ-2).
+- Detail pane actions (Duplicate / Delete) live in a sticky bottom action bar that never moves with the subtask count (REQ-3, experiment).
 - JSON export and replacement import; automatic migration from v1 data.
 - Browser-local storage and a responsive layout.
 - Manifest, icons, and an offline app-shell service worker for supported hosted use.
