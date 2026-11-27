@@ -81,8 +81,8 @@ const cssText = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
 ok(!/font-size:\s*[\d.]+px/.test(cssText), 'no px font sizes (rem type scale)');
 ok(!cssText.includes('#9ca3af'), 'no hard-coded grey #9ca3af remains');
 const ruleOf = sel => (cssText.match(new RegExp(sel.replace(/[.*]/g, m => '\\' + m) + '\\s*{([^}]*)')) || [])[1] || '';
-ok(/padding:\s*\.75rem/.test(ruleOf('.task')) && /padding:\s*\.75rem/.test(ruleOf('.sub')), 'task and subtask rows share padding');
-ok(/border-radius:\s*\.75rem/.test(ruleOf('.task')) && /border-radius:\s*\.75rem/.test(ruleOf('.sub')), 'task and subtask rows share radius');
+ok(/padding:\s*\.5rem \.75rem/.test(ruleOf('.task')) && /padding:\s*\.5rem \.75rem/.test(ruleOf('.sub')), 'task and subtask rows share compact padding');
+ok(/border-radius:\s*0/.test(ruleOf('.task')) && /border-radius:\s*0/.test(ruleOf('.sub')), 'task and subtask rows are flat (no card radius)');
 ok((rootBlock.match(/--chip-today-bg/g) || []).length === 1 && (darkBlock.match(/--chip-today-bg/g) || []).length === 1, 'due chips are themed in both themes');
 ok(/\.sub\.drag-over\s*{[^}]*var\(--accent\)/.test(cssText), 'subtask drag indicator uses var(--accent)');
 
@@ -93,6 +93,13 @@ ok(varOf(darkBlock, '--panel') === '#121f45', 'dark --panel is #121f45');
 ok(varOf(darkBlock, '--hover') === '#1e3268', 'dark --hover is #1e3268');
 ok(/\.icon-btn\.edit\s*{[^}]*transform:\s*scaleX\(-1\)/.test(html), 'edit pencil is laterally inverted (scaleX(-1))');
 ok(html.includes('class="flip-x">✎'), 'hint pencil glyph is flipped too');
+
+// 11. Wunderlist-flavor compact flat rows + round checkbox (REQ-6 / DES-6, experiment)
+ok(/border-bottom:\s*1px solid var\(--border\)/.test(ruleOf('.task')), 'task rows use a hairline divider, not a card border');
+ok(/border-bottom:\s*1px solid var\(--border\)/.test(ruleOf('.sub')), 'subtask rows use a hairline divider, not a card border');
+ok(/\.task\.selected\s*{[^}]*box-shadow:\s*inset 3px 0 0 var\(--accent\)/.test(cssText), 'selected task uses a left accent bar');
+ok(/input\[type="checkbox"\]\s*{[^}]*appearance:\s*none[^}]*border-radius:\s*50%/.test(cssText), 'checkbox is custom-styled round');
+ok(/input\[type="checkbox"\]:checked::after\s*{[^}]*clip-path/.test(cssText), 'checked checkbox draws a check mark');
 
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);

@@ -38,3 +38,9 @@
 
 No px font sizes; no #9ca3af; task/sub share padding and radius; chip
 variables defined in both themes; subtask drag indicator uses --accent.
+
+## Amendment (2026-11-27)
+
+Row component superseded on this branch by DES-6: rows are flat
+(hairline divider, no radius, padding .5rem .75rem) and the checkbox is
+a styled 20px circle. See DES-6-COMPACT-ROWS.md.
