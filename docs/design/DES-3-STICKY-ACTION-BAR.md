@@ -16,3 +16,10 @@
 - sw.js cache bumps todo-v2-7 -> todo-v2-8.
 - Tests: smoke section 8 pins the bar's presence, stickiness, Delete inside
   the bar, the danger-tint rule, and the absence of #fecaca.
+
+## Amendment (2026-11-27)
+
+The bar no longer bleeds to the pane edges: since DES-7 the detail
+content is a capped, centered column, and the bar's side margins are 0
+so it sits flush with that column. Bottom bleed (-1rem) unchanged.
+See DES-7-DETAIL-MEASURE.md.

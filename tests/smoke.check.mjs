@@ -51,19 +51,19 @@ const rootBlock = (html.match(/:root\s*{([^}]*)}/) || [])[1] || '';
 const darkBlock = (html.match(/body\.dark\s*{([^}]*)}/) || [])[1] || '';
 const headVar = (block) => ((block.match(/--head:\s*(#[0-9a-fA-F]+)/) || [])[1] || '').toLowerCase();
 ok(headVar(rootBlock) === '#fffdf5', 'light theme --head is #fffdf5 (champagne panel)');
-ok(headVar(darkBlock) === '#0a1430', 'dark theme --head is #0a1430 (midnight navy panel)');
+ok(headVar(darkBlock) === '#121f45', 'dark theme --head is #121f45 (navy++ panel)');
 const headerRule = (html.match(/header\s*{([^}]*)}/) || [])[1] || '';
 ok(/background:\s*var\(--head\)/.test(headerRule) && /color:\s*var\(--head-text\)/.test(headerRule), 'header uses var(--head) and var(--head-text)');
 const headerBtnRule = (html.match(/header button\s*{([^}]*)}/) || [])[1] || '';
 ok(/var\(--head-btn\)/.test(headerBtnRule) && !/#[0-9a-fA-F]{3,6}/.test(headerBtnRule), 'header buttons use theme variables, no literal colors');
 
 
-// 7. Theme palettes (REQ-2 / DES-2): champagne light, black & gold dark
+// 7. Theme palettes (REQ-2 / DES-2, dark superseded by REQ-5 / DES-5): champagne light, navy++ dark
 const varOf = (block, name) => ((block.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]+)')) || [])[1] || '').toLowerCase();
 ok(varOf(rootBlock, '--bg') === '#fbf3d9', 'light --bg is champagne #fbf3d9');
 ok(varOf(rootBlock, '--accent') === '#b45309', 'light --accent is amber #b45309');
-ok(varOf(darkBlock, '--bg') === '#050b1f', 'dark --bg is midnight navy #050b1f');
-ok(varOf(darkBlock, '--accent') === '#3b82f6', 'dark --accent is azure #3b82f6');
+ok(varOf(darkBlock, '--bg') === '#03061a', 'dark --bg is navy++ #03061a');
+ok(varOf(darkBlock, '--accent') === '#4f8ff7', 'dark --accent is bright azure #4f8ff7');
 ok(/\.add-row button\s*{[^}]*background:\s*var\(--accent\)/.test(html), 'Add button uses var(--accent)');
 ok(/\.task\.selected\s*{[^}]*var\(--accent\)/.test(html), 'selected task ring uses var(--accent)');
 
@@ -74,6 +74,39 @@ ok(html.indexOf('id="delTaskBtn"') > html.indexOf('class="action-bar"'), 'Delete
 ok(/\.action-bar\s*{[^}]*position:\s*sticky/.test(html), 'action bar is sticky');
 ok(/\.danger\s*{[^}]*background:\s*var\(--danger-hover\)/.test(html), 'Delete uses the theme danger tint');
 ok(!html.includes('#fecaca'), 'no hard-coded pink border remains');
+
+
+// 9. Layout system (REQ-4 / DES-4, experiment)
+const cssText = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+ok(!/font-size:\s*[\d.]+px/.test(cssText), 'no px font sizes (rem type scale)');
+ok(!cssText.includes('#9ca3af'), 'no hard-coded grey #9ca3af remains');
+const ruleOf = sel => (cssText.match(new RegExp(sel.replace(/[.*]/g, m => '\\' + m) + '\\s*{([^}]*)')) || [])[1] || '';
+ok(/padding:\s*\.5rem \.75rem/.test(ruleOf('.task')) && /padding:\s*\.5rem \.75rem/.test(ruleOf('.sub')), 'task and subtask rows share compact padding');
+ok(/border-radius:\s*0/.test(ruleOf('.task')) && /border-radius:\s*0/.test(ruleOf('.sub')), 'task and subtask rows are flat (no card radius)');
+ok((rootBlock.match(/--chip-today-bg/g) || []).length === 1 && (darkBlock.match(/--chip-today-bg/g) || []).length === 1, 'due chips are themed in both themes');
+ok(/\.sub\.drag-over\s*{[^}]*var\(--drag-sub\)/.test(cssText), 'subtask drag indicator uses its own color var(--drag-sub)');
+ok(varOf(rootBlock, '--drag-sub') === '#0f766e' && varOf(darkBlock, '--drag-sub') === '#2dd4bf', 'drag-sub is teal in both themes');
+
+
+// 10. Dark contrast + edit icon flip (REQ-5 / DES-5, experiment)
+ok(varOf(darkBlock, '--border') === '#354b8f', 'dark --border is lifted navy #354b8f');
+ok(varOf(darkBlock, '--panel') === '#121f45', 'dark --panel is #121f45');
+ok(varOf(darkBlock, '--hover') === '#1e3268', 'dark --hover is #1e3268');
+ok(/\.icon-btn\.edit\s*{[^}]*transform:\s*scaleX\(-1\)/.test(html), 'edit pencil is laterally inverted (scaleX(-1))');
+ok(html.includes('class="flip-x">✎'), 'hint pencil glyph is flipped too');
+
+// 11. Wunderlist-flavor compact flat rows + round checkbox (REQ-6 / DES-6, experiment)
+ok(/border-bottom:\s*1px solid var\(--border\)/.test(ruleOf('.task')), 'task rows use a hairline divider, not a card border');
+ok(/border-bottom:\s*1px solid var\(--border\)/.test(ruleOf('.sub')), 'subtask rows use a hairline divider, not a card border');
+ok(/\.task\.selected\s*{[^}]*box-shadow:\s*inset 3px 0 0 var\(--accent\)/.test(cssText), 'selected task uses a left accent bar');
+ok(/input\[type="checkbox"\]\s*{[^}]*appearance:\s*none[^}]*border-radius:\s*50%/.test(cssText), 'checkbox is custom-styled round');
+ok(/input\[type="checkbox"\]:checked::after\s*{[^}]*clip-path/.test(cssText), 'checked checkbox draws a check mark');
+
+
+// 12. Detail measure: capped, centered content column (REQ-7 / DES-7, experiment)
+ok(/#detailContent\s*{[^}]*max-width:\s*46rem/.test(cssText), 'detail content is capped at 46rem');
+ok(/#detailContent\s*{[^}]*margin-inline:\s*auto/.test(cssText), 'detail content is centered');
+ok(/\.action-bar\s*{[^}]*margin:\s*1rem 0 -1rem/.test(cssText), 'action bar is flush with the content column, not the pane');
 
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
