@@ -102,5 +102,11 @@ ok(/\.task\.selected\s*{[^}]*box-shadow:\s*inset 3px 0 0 var\(--accent\)/.test(c
 ok(/input\[type="checkbox"\]\s*{[^}]*appearance:\s*none[^}]*border-radius:\s*50%/.test(cssText), 'checkbox is custom-styled round');
 ok(/input\[type="checkbox"\]:checked::after\s*{[^}]*clip-path/.test(cssText), 'checked checkbox draws a check mark');
 
+
+// 12. Detail measure: capped, centered content column (REQ-7 / DES-7, experiment)
+ok(/#detailContent\s*{[^}]*max-width:\s*46rem/.test(cssText), 'detail content is capped at 46rem');
+ok(/#detailContent\s*{[^}]*margin-inline:\s*auto/.test(cssText), 'detail content is centered');
+ok(/\.action-bar\s*{[^}]*margin:\s*1rem 0 -1rem/.test(cssText), 'action bar is flush with the content column, not the pane');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);

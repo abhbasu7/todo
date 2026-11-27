@@ -1,6 +1,6 @@
 // Todo v2 service worker — cache the app shell so it works offline on the phone.
 // Bump CACHE when you ship a new version, or the phone will keep serving the old one.
-const CACHE = 'todo-v2-12';
+const CACHE = 'todo-v2-13';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
