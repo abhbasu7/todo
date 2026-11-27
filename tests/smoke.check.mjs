@@ -108,5 +108,13 @@ ok(/#detailContent\s*{[^}]*max-width:\s*46rem/.test(cssText), 'detail content is
 ok(/#detailContent\s*{[^}]*margin-inline:\s*auto/.test(cssText), 'detail content is centered');
 ok(/\.action-bar\s*{[^}]*margin:\s*1rem 0 -1rem/.test(cssText), 'action bar is flush with the content column, not the pane');
 
+
+// 13. Draggable divider (REQ-8 / DES-8, experiment)
+ok(html.includes('id="splitter"'), 'splitter element exists between the panes');
+ok(/\.splitter\s*{[^}]*cursor:\s*col-resize/.test(cssText), 'splitter is a col-resize drag handle');
+ok(/\.splitter\s*{[^}]*display:\s*none/.test(cssText), 'splitter is hidden on mobile');
+ok(html.includes('LIST_MIN=288') && html.includes('LIST_MAX=640'), 'list width is bounded (288..640px)');
+ok(html.includes('state.listW'), 'list width is remembered in state');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
