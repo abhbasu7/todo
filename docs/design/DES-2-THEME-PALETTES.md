@@ -37,3 +37,11 @@ The due badge uses var(--hover) / var(--muted).
 - Section 7 pins the palettes: dark --bg #050b1f, dark --accent #3b82f6,
   light --bg #fbf3d9, light --accent #b45309, and the Add button plus
   selected-task rules use var(--accent).
+
+## Amendment (2026-11-26)
+
+The Midnight Navy dark values above are superseded on the experiment
+branch by DES-5 (Navy++): --bg #03061a, --panel #121f45,
+--panel2 #0a1430, --border #354b8f, --hover #1e3268, --accent #4f8ff7,
+--head-btn #243a70, --muted #b0bedd, --text #ecf0fb; theme-color dark
+#121f45; sw cache todo-v2-10. Full values in DES-5-DARK-CONTRAST.md.

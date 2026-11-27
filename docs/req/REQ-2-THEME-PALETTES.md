@@ -29,3 +29,9 @@ read as panels.
   selected ring, checkbox, progress, and focus outlines — nowhere else large.
 - Light values match DES-2 exactly; no pure-white surface remains.
 - CI smoke checks pin both palettes (DES-2).
+
+## Amendment (2026-11-26)
+
+Dark palette superseded on the experiment branch by REQ-5 / DES-5
+(Navy++): same Midnight Navy family, layers spread for contrast.
+Light Champagne unchanged. See REQ-5-DARK-CONTRAST.md.

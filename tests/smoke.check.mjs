@@ -51,19 +51,19 @@ const rootBlock = (html.match(/:root\s*{([^}]*)}/) || [])[1] || '';
 const darkBlock = (html.match(/body\.dark\s*{([^}]*)}/) || [])[1] || '';
 const headVar = (block) => ((block.match(/--head:\s*(#[0-9a-fA-F]+)/) || [])[1] || '').toLowerCase();
 ok(headVar(rootBlock) === '#fffdf5', 'light theme --head is #fffdf5 (champagne panel)');
-ok(headVar(darkBlock) === '#0a1430', 'dark theme --head is #0a1430 (midnight navy panel)');
+ok(headVar(darkBlock) === '#121f45', 'dark theme --head is #121f45 (navy++ panel)');
 const headerRule = (html.match(/header\s*{([^}]*)}/) || [])[1] || '';
 ok(/background:\s*var\(--head\)/.test(headerRule) && /color:\s*var\(--head-text\)/.test(headerRule), 'header uses var(--head) and var(--head-text)');
 const headerBtnRule = (html.match(/header button\s*{([^}]*)}/) || [])[1] || '';
 ok(/var\(--head-btn\)/.test(headerBtnRule) && !/#[0-9a-fA-F]{3,6}/.test(headerBtnRule), 'header buttons use theme variables, no literal colors');
 
 
-// 7. Theme palettes (REQ-2 / DES-2): champagne light, black & gold dark
+// 7. Theme palettes (REQ-2 / DES-2, dark superseded by REQ-5 / DES-5): champagne light, navy++ dark
 const varOf = (block, name) => ((block.match(new RegExp(name + ':\\s*(#[0-9a-fA-F]+)')) || [])[1] || '').toLowerCase();
 ok(varOf(rootBlock, '--bg') === '#fbf3d9', 'light --bg is champagne #fbf3d9');
 ok(varOf(rootBlock, '--accent') === '#b45309', 'light --accent is amber #b45309');
-ok(varOf(darkBlock, '--bg') === '#050b1f', 'dark --bg is midnight navy #050b1f');
-ok(varOf(darkBlock, '--accent') === '#3b82f6', 'dark --accent is azure #3b82f6');
+ok(varOf(darkBlock, '--bg') === '#03061a', 'dark --bg is navy++ #03061a');
+ok(varOf(darkBlock, '--accent') === '#4f8ff7', 'dark --accent is bright azure #4f8ff7');
 ok(/\.add-row button\s*{[^}]*background:\s*var\(--accent\)/.test(html), 'Add button uses var(--accent)');
 ok(/\.task\.selected\s*{[^}]*var\(--accent\)/.test(html), 'selected task ring uses var(--accent)');
 
@@ -85,6 +85,14 @@ ok(/padding:\s*\.75rem/.test(ruleOf('.task')) && /padding:\s*\.75rem/.test(ruleO
 ok(/border-radius:\s*\.75rem/.test(ruleOf('.task')) && /border-radius:\s*\.75rem/.test(ruleOf('.sub')), 'task and subtask rows share radius');
 ok((rootBlock.match(/--chip-today-bg/g) || []).length === 1 && (darkBlock.match(/--chip-today-bg/g) || []).length === 1, 'due chips are themed in both themes');
 ok(/\.sub\.drag-over\s*{[^}]*var\(--accent\)/.test(cssText), 'subtask drag indicator uses var(--accent)');
+
+
+// 10. Dark contrast + edit icon flip (REQ-5 / DES-5, experiment)
+ok(varOf(darkBlock, '--border') === '#354b8f', 'dark --border is lifted navy #354b8f');
+ok(varOf(darkBlock, '--panel') === '#121f45', 'dark --panel is #121f45');
+ok(varOf(darkBlock, '--hover') === '#1e3268', 'dark --hover is #1e3268');
+ok(/\.icon-btn\.edit\s*{[^}]*transform:\s*scaleX\(-1\)/.test(html), 'edit pencil is laterally inverted (scaleX(-1))');
+ok(html.includes('class="flip-x">✎'), 'hint pencil glyph is flipped too');
 
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
