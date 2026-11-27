@@ -108,5 +108,19 @@ ok(/#detailContent\s*{[^}]*max-width:\s*46rem/.test(cssText), 'detail content is
 ok(/#detailContent\s*{[^}]*margin-inline:\s*auto/.test(cssText), 'detail content is centered');
 ok(/\.action-bar\s*{[^}]*margin:\s*1rem 0 -1rem/.test(cssText), 'action bar is flush with the content column, not the pane');
 
+
+// 13. Draggable divider (REQ-8 / DES-8, experiment)
+ok(html.includes('id="splitter"'), 'splitter element exists between the panes');
+ok(/\.splitter\s*{[^}]*cursor:\s*col-resize/.test(cssText), 'splitter is a col-resize drag handle');
+ok(/\.splitter\s*{[^}]*display:\s*none/.test(cssText), 'splitter is hidden on mobile');
+ok(html.includes('LIST_MIN=288') && html.includes('LIST_MAX=640'), 'list width is bounded (288..640px)');
+ok(html.includes('state.listW'), 'list width is remembered in state');
+
+
+// 14. Themed pane scrollbars (REQ-9 / DES-9, experiment)
+ok(varOf(rootBlock, '--scroll-thumb') === '#e0d3a8' && varOf(darkBlock, '--scroll-thumb') === '#26386e', 'scroll thumb color is themed in both themes');
+ok(/\.panel::-webkit-scrollbar-thumb\s*{[^}]*var\(--scroll-thumb\)/.test(cssText), 'webkit scrollbar thumb uses the theme color');
+ok(/\.panel\s*{[^}]*scrollbar-color:\s*var\(--scroll-thumb\)/.test(cssText), 'Firefox scrollbar color uses the theme color');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
