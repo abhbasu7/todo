@@ -42,3 +42,10 @@ component values in DES-4 (padding/radius); the rest of DES-4 stands.
   are flat (border-radius 0).
 - Section 11 (new): hairline divider on .task and .sub, selected-row
   inset accent bar, round custom checkbox, checked check mark.
+
+## Amendment (2026-11-27, Abhi's pick)
+
+The subtask drag-over line gets its own color instead of the accent:
+new theme variable --drag-sub — light #0f766e, dark #2dd4bf (teal in
+both themes). .sub.drag-over uses var(--drag-sub); .task.drag-over
+keeps var(--accent). Smoke section 9 pin updated; sw cache todo-v2-12.

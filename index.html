@@ -14,8 +14,8 @@
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <style>
-  :root { --bg:#fbf3d9; --panel:#fffdf5; --panel2:#faf0d0; --text:#2a2110; --muted:#7d6f4a; --border:#eadfbc; --head:#fffdf5; --head-text:#2a2110; --head-btn:#faf0d0; --head-btn-text:#2a2110; --head-btn-border:#eadfbc; --head-border:#eadfbc; --hover:#faf0d0; --focus:#b45309; --accent:#b45309; --accent-text:#ffffff; --danger-hover:#fee2e2; --danger-text:#b91c1c; --chip-today-bg:#fef3c7; --chip-today-text:#92400e; --chip-over-bg:#fee2e2; --chip-over-text:#991b1b; }
-  body.dark { --bg:#03061a; --panel:#121f45; --panel2:#0a1430; --text:#ecf0fb; --muted:#b0bedd; --border:#354b8f; --head:#121f45; --head-text:#ecf0fb; --head-btn:#243a70; --head-btn-text:#ecf0fb; --head-btn-border:#3d5ca3; --head-border:#354b8f; --hover:#1e3268; --focus:#60a5fa; --accent:#4f8ff7; --accent-text:#ffffff; --danger-hover:#450a0a; --danger-text:#f87171; --chip-today-bg:#572303; --chip-today-text:#fcd34d; --chip-over-bg:#450a0a; --chip-over-text:#fca5a5; }
+  :root { --bg:#fbf3d9; --panel:#fffdf5; --panel2:#faf0d0; --text:#2a2110; --muted:#7d6f4a; --border:#eadfbc; --head:#fffdf5; --head-text:#2a2110; --head-btn:#faf0d0; --head-btn-text:#2a2110; --head-btn-border:#eadfbc; --head-border:#eadfbc; --hover:#faf0d0; --focus:#b45309; --accent:#b45309; --accent-text:#ffffff; --danger-hover:#fee2e2; --danger-text:#b91c1c; --chip-today-bg:#fef3c7; --chip-today-text:#92400e; --chip-over-bg:#fee2e2; --chip-over-text:#991b1b; --drag-sub:#0f766e; }
+  body.dark { --bg:#03061a; --panel:#121f45; --panel2:#0a1430; --text:#ecf0fb; --muted:#b0bedd; --border:#354b8f; --head:#121f45; --head-text:#ecf0fb; --head-btn:#243a70; --head-btn-text:#ecf0fb; --head-btn-border:#3d5ca3; --head-border:#354b8f; --hover:#1e3268; --focus:#60a5fa; --accent:#4f8ff7; --accent-text:#ffffff; --danger-hover:#450a0a; --danger-text:#f87171; --chip-today-bg:#572303; --chip-today-text:#fcd34d; --chip-over-bg:#450a0a; --chip-over-text:#fca5a5; --drag-sub:#2dd4bf; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); height:100dvh; display:flex; flex-direction:column; }
   header { padding:1rem; padding-top:calc(1rem + env(safe-area-inset-top)); background:var(--head); color:var(--head-text); border-bottom:1px solid var(--head-border); display:flex; justify-content:space-between; align-items:center; gap:.75rem; flex-wrap:wrap; }
@@ -49,7 +49,7 @@
   .icon-btn:hover { color:var(--text); } .icon-btn.del:hover { color:var(--danger-text); }
   .drag { cursor:grab; color:var(--muted); font-size:.875rem; flex-shrink:0; }
   .task.drag-over { border-top:3px solid var(--accent); }
-  .sub.drag-over { border-top:3px solid var(--accent); }
+  .sub.drag-over { border-top:3px solid var(--drag-sub); }
   input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:20px; height:20px; margin:0; border:1.5px solid var(--muted); border-radius:50%; background:transparent; cursor:pointer; flex-shrink:0; display:inline-grid; place-content:center; }
   input[type="checkbox"]:checked { background:var(--accent); border-color:var(--accent); }
   input[type="checkbox"]:checked::after { content:""; width:11px; height:11px; background:var(--accent-text); clip-path:polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); }

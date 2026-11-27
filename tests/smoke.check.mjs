@@ -84,7 +84,8 @@ const ruleOf = sel => (cssText.match(new RegExp(sel.replace(/[.*]/g, m => '\\' +
 ok(/padding:\s*\.5rem \.75rem/.test(ruleOf('.task')) && /padding:\s*\.5rem \.75rem/.test(ruleOf('.sub')), 'task and subtask rows share compact padding');
 ok(/border-radius:\s*0/.test(ruleOf('.task')) && /border-radius:\s*0/.test(ruleOf('.sub')), 'task and subtask rows are flat (no card radius)');
 ok((rootBlock.match(/--chip-today-bg/g) || []).length === 1 && (darkBlock.match(/--chip-today-bg/g) || []).length === 1, 'due chips are themed in both themes');
-ok(/\.sub\.drag-over\s*{[^}]*var\(--accent\)/.test(cssText), 'subtask drag indicator uses var(--accent)');
+ok(/\.sub\.drag-over\s*{[^}]*var\(--drag-sub\)/.test(cssText), 'subtask drag indicator uses its own color var(--drag-sub)');
+ok(varOf(rootBlock, '--drag-sub') === '#0f766e' && varOf(darkBlock, '--drag-sub') === '#2dd4bf', 'drag-sub is teal in both themes');
 
 
 // 10. Dark contrast + edit icon flip (REQ-5 / DES-5, experiment)
