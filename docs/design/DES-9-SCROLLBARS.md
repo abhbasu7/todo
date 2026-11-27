@@ -27,3 +27,14 @@ Implements REQ-9 on experiment/drag-divider.
 
 - Section 14 (new): thumb var in both themes, WebKit thumb rule,
   Firefox scrollbar-color rule.
+
+## Amendment (2026-11-27, Abhi's feedback: rest state too thin)
+
+The classic thin-when-idle pattern, done without the layout shift:
+the gutter is fixed at 12px (scrollbar-gutter: stable) and only the
+thumb's visual thickness changes. Rest: 3px transparent border ->
+~6px thumb. Pane hover or thumb hover: 1px border -> ~10px thumb.
+:active (dragging) holds the wide state and the hover color.
+Firefox note: scrollbar-width has no hover state, so Firefox keeps
+the thin themed bar — a platform limit, not a choice.
+Cache: todo-v2-15 -> todo-v2-16.

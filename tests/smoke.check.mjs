@@ -122,5 +122,12 @@ ok(varOf(rootBlock, '--scroll-thumb') === '#e0d3a8' && varOf(darkBlock, '--scrol
 ok(/\.panel::-webkit-scrollbar-thumb\s*{[^}]*var\(--scroll-thumb\)/.test(cssText), 'webkit scrollbar thumb uses the theme color');
 ok(/\.panel\s*{[^}]*scrollbar-color:\s*var\(--scroll-thumb\)/.test(cssText), 'Firefox scrollbar color uses the theme color');
 
+
+// 15. Scrollbar widens on hover / drag (REQ-9 amendment, DES-9)
+ok(/\.panel\s*{[^}]*scrollbar-gutter:\s*stable/.test(cssText), 'scrollbar gutter is reserved (no layout shift)');
+ok(/\.panel::-webkit-scrollbar\s*{[^}]*width:\s*12px/.test(cssText), 'scrollbar gutter is 12px');
+ok(/\.panel:hover::-webkit-scrollbar-thumb\s*{[^}]*border:\s*1px/.test(cssText), 'thumb widens when the pane is hovered');
+ok(/\.panel::-webkit-scrollbar-thumb:active\s*{[^}]*border:\s*1px/.test(cssText), 'thumb stays wide while dragging');
+
 console.log(fails ? `\n${fails} check(s) FAILED` : '\nAll smoke checks passed');
 process.exit(fails ? 1 : 0);
